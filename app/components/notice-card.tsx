@@ -1,134 +1,295 @@
 "use client";
 
 import { useState } from "react";
+
 import type { Notice } from "@/lib/notices";
 
 interface NoticeCardProps {
   notice: Notice;
-  onEdit:   (notice: Notice) => void;
+
+  onEdit: (notice: Notice) => void;
+
   onDelete: (id: string) => void;
 }
 
-export default function NoticeCard({ notice, onEdit, onDelete }: NoticeCardProps) {
-  const [confirming, setConfirming] = useState(false);
+export default function NoticeCard({
+  notice,
 
-  const categoryColors: Record<string, string> = {
-    General:        "bg-slate-100 text-slate-700",
-    Academics:      "bg-blue-100 text-blue-700",
-    Placement:      "bg-purple-100 text-purple-700",
-    Events:         "bg-orange-100 text-orange-700",
-    Sports:         "bg-green-100 text-green-700",
-    Administration: "bg-red-100 text-red-700",
-    Library:        "bg-amber-100 text-amber-700",
-    Hostel:         "bg-teal-100 text-teal-700",
+  onEdit,
+
+  onDelete,
+}: NoticeCardProps) {
+  const [confirming, setConfirming] =
+    useState(false);
+
+  const categoryColors: Record<
+    string,
+    string
+  > = {
+    General:
+      "bg-slate-100 text-slate-700",
+
+    Academics:
+      "bg-blue-100 text-blue-700",
+
+    Placement:
+      "bg-purple-100 text-purple-700",
+
+    Events:
+      "bg-orange-100 text-orange-700",
+
+    Sports:
+      "bg-green-100 text-green-700",
+
+    Administration:
+      "bg-red-100 text-red-700",
+
+    Library:
+      "bg-amber-100 text-amber-700",
+
+    Hostel:
+      "bg-teal-100 text-teal-700",
   };
 
   const colorClass =
-    categoryColors[notice.category] ?? "bg-slate-100 text-slate-700";
+    categoryColors[
+      notice.category
+    ] ??
+    "bg-slate-100 text-slate-700";
 
-  const formattedDate = new Date(notice.created_at).toLocaleDateString(
-    "en-IN",
-    { day: "numeric", month: "short", year: "numeric" }
-  );
-
-  const formattedExpiry = notice.expiry_date
-    ? new Date(notice.expiry_date).toLocaleDateString("en-IN", {
+  const createdDate =
+    new Date(
+      notice.created_at
+    ).toLocaleDateString(
+      "en-IN",
+      {
         day: "numeric",
+
         month: "short",
+
         year: "numeric",
-      })
-    : null;
+      }
+    );
+
+  const expiryDate =
+    notice.expiry_date
+      ? new Date(
+          notice.expiry_date
+        ).toLocaleDateString(
+          "en-IN",
+          {
+            day: "numeric",
+
+            month: "short",
+
+            year: "numeric",
+          }
+        )
+      : null;
 
   return (
     <div
       className={`
-        relative bg-white rounded-2xl border shadow-sm hover:shadow-md
-        transition-all duration-200 animate-fade-in overflow-hidden
-        ${notice.important ? "border-indigo-300 ring-1 ring-indigo-200" : "border-slate-200"}
-      `}
+      group
+
+      relative
+
+      overflow-hidden
+
+      bg-white
+
+      rounded-3xl
+
+      p-8
+
+      shadow-sm
+
+      border
+
+      transition-all
+
+      duration-300
+
+      hover:-translate-y-2
+
+      hover:shadow-2xl
+
+      ${
+        notice.important
+          ? "border-indigo-300"
+
+          : "border-slate-200"
+      }
+    `}
     >
-      {/* Important ribbon */}
+      {/* Top Border */}
+
       {notice.important && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-t-2xl" />
+
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-600 to-violet-600" />
+
       )}
 
-      <div className="p-5 pt-6">
-        {/* Header row */}
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${colorClass}`}>
-              {notice.category}
-            </span>
-            {notice.important && (
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">
-                📌 Important
-              </span>
-            )}
-          </div>
+      {/* Header */}
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-1 shrink-0">
+      <div className="flex justify-between items-start gap-4 mb-6">
+
+        <div className="flex flex-wrap gap-3">
+
+          <span
+            className={`px-4 py-1 rounded-full text-xs font-semibold ${colorClass}`}
+          >
+
+            {notice.category}
+
+          </span>
+
+          {notice.important && (
+
+            <span className="px-4 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700">
+
+              📌 Important
+
+            </span>
+
+          )}
+
+        </div>
+
+        {/* Buttons */}
+
+        <div className="flex gap-2">
+
+          <button
+            onClick={() =>
+              onEdit(notice)
+            }
+
+            className="w-10 h-10 rounded-xl bg-slate-100 hover:bg-indigo-100 hover:text-indigo-700 transition"
+
+            title="Edit"
+          >
+
+            ✏️
+
+          </button>
+
+          {confirming ? (
+
+            <div className="flex gap-2">
+
+              <button
+                onClick={() =>
+                  onDelete(
+                    notice.id
+                  )
+                }
+
+                className="px-3 py-2 rounded-xl bg-red-500 text-white hover:bg-red-600 text-sm font-medium"
+              >
+
+                Delete
+
+              </button>
+
+              <button
+                onClick={() =>
+                  setConfirming(
+                    false
+                  )
+                }
+
+                className="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-sm"
+              >
+
+                Cancel
+
+              </button>
+
+            </div>
+
+          ) : (
+
             <button
-              onClick={() => onEdit(notice)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
-              title="Edit notice"
+              onClick={() =>
+                setConfirming(
+                  true
+                )
+              }
+
+              className="w-10 h-10 rounded-xl bg-slate-100 hover:bg-red-100 hover:text-red-600 transition"
+
+              title="Delete"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
+
+              🗑️
+
             </button>
 
-            {confirming ? (
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => onDelete(notice.id)}
-                  className="text-xs px-2 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors font-medium"
-                >
-                  Confirm
-                </button>
-                <button
-                  onClick={() => setConfirming(false)}
-                  className="text-xs px-2 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setConfirming(true)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
-                title="Delete notice"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Title */}
-        <h3 className="font-semibold text-slate-800 text-base leading-snug mb-2">
-          {notice.title}
-        </h3>
-
-        {/* Description */}
-        <p className="text-slate-600 text-sm leading-relaxed line-clamp-3">
-          {notice.description}
-        </p>
-
-        {/* Footer */}
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
-          <span className="text-xs text-slate-400">Posted {formattedDate}</span>
-          {formattedExpiry && (
-            <span className="text-xs text-amber-600 font-medium">
-              Expires {formattedExpiry}
-            </span>
           )}
+
         </div>
+
       </div>
+
+      {/* Title */}
+
+      <h2 className="text-2xl font-bold text-slate-900 mb-4 leading-tight">
+
+        {notice.title}
+
+      </h2>
+
+      {/* Description */}
+
+      <p className="text-slate-600 leading-8 text-base line-clamp-4">
+
+        {notice.description}
+
+      </p>
+
+      {/* Footer */}
+
+      <div className="mt-8 pt-6 border-t border-slate-200 flex justify-between items-center">
+
+        <div>
+
+          <p className="text-xs text-slate-400">
+
+            Posted
+
+          </p>
+
+          <p className="font-semibold text-slate-700">
+
+            {createdDate}
+
+          </p>
+
+        </div>
+
+        {expiryDate && (
+
+          <div className="text-right">
+
+            <p className="text-xs text-slate-400">
+
+              Expires
+
+            </p>
+
+            <p className="font-semibold text-orange-600">
+
+              {expiryDate}
+
+            </p>
+
+          </div>
+
+        )}
+
+      </div>
+
     </div>
   );
 }

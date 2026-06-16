@@ -1,68 +1,195 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 import NoticeForm from "./components/notice-form";
-
 import NoticeList from "./components/notice-list";
-
 import AiSearchAssistant from "./components/ai-search-assistant";
 
-export const dynamic = "force-dynamic";
+import {
+  Notice,
+  fetchNotices,
+  deleteNotice,
+} from "@/lib/notices";
 
 export default function Page() {
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [editingNotice, setEditingNotice] =
+    useState<Notice | null>(null);
+
+  async function loadNotices() {
+    try {
+      setLoading(true);
+
+      const data = await fetchNotices();
+
+      setNotices(data ?? []);
+    } catch (error) {
+      console.error(error);
+
+      setNotices([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadNotices();
+  }, []);
+
+  function handleEdit(notice: Notice) {
+    setEditingNotice(notice);
+  }
+
+  async function handleDelete(id: string) {
+    try {
+      await deleteNotice(id);
+
+      await loadNotices();
+    } catch (error) {
+      console.error(error);
+
+      alert("Failed to delete notice.");
+    }
+  }
+
+  function handleSuccess() {
+    setEditingNotice(null);
+
+    loadNotices();
+  }
+
+  function handleCancel() {
+    setEditingNotice(null);
+  }
+
+  const importantCount = notices.filter(
+    (n) => n.important
+  ).length;
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
+    <main className="min-h-screen bg-slate-100">
 
-      {/* Background Glow */}
+      {/* TOP BAR */}
 
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+      <div className="sticky top-0 z-40 bg-white border-b border-slate-200">
 
-        <div className="absolute -top-32 left-10 h-80 w-80 rounded-full bg-indigo-400/20 blur-3xl" />
+        <div className="h-20 px-8 flex items-center justify-between">
 
-        <div className="absolute top-40 right-0 h-96 w-96 rounded-full bg-purple-400/20 blur-3xl" />
+          <div>
 
-        <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-sky-400/20 blur-3xl" />
+            <p className="text-sm text-indigo-600 font-semibold">
+
+              SMART NOTICE SYSTEM
+
+            </p>
+
+            <h1 className="text-3xl font-bold text-slate-900">
+
+              📖 AI Powered Digital Notice Board
+
+            </h1>
+
+          </div>
+
+          <div className="hidden lg:flex items-center gap-4">
+
+            <div className="bg-indigo-50 px-5 py-3 rounded-2xl">
+
+              <p className="text-xs text-slate-500">
+
+                Total Notices
+
+              </p>
+
+              <p className="text-2xl font-bold text-indigo-700">
+
+                {notices.length}
+
+              </p>
+
+            </div>
+
+            <div className="bg-purple-50 px-5 py-3 rounded-2xl">
+
+              <p className="text-xs text-slate-500">
+
+                Important
+
+              </p>
+
+              <p className="text-2xl font-bold text-purple-700">
+
+                {importantCount}
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
 
       </div>
 
-      <div className="relative mx-auto max-w-5xl px-5 py-10 space-y-8">
+      {/* CONTENT */}
 
-        {/* Header */}
+      <div className="px-8 py-8">
 
-        <header className="rounded-2xl border border-white/40 bg-white/60 p-6 backdrop-blur-xl shadow-sm">
+        <div className="grid grid-cols-12 gap-8">
 
-          <span className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700">
+          {/* LEFT */}
 
-            <span className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
+          <div className="col-span-12 lg:col-span-4">
 
-            Smart Notice System
+            <div className="sticky top-28">
 
-          </span>
+              <NoticeForm
+                editNotice={editingNotice}
+                onSuccess={handleSuccess}
+                onCancel={handleCancel}
+              />
 
-          <h1 className="text-4xl font-bold text-gray-900">
+            </div>
 
-            📖 AI Powered Digital Notice Board
+          </div>
 
-          </h1>
+          {/* RIGHT */}
 
-          <p className="mt-2 text-gray-600">
+          <div className="col-span-12 lg:col-span-8 space-y-8">
 
-            Create, manage and search notices using Gemini AI.
+            <div className="bg-white rounded-3xl shadow-sm p-6">
 
-          </p>
+              <h2 className="text-2xl font-bold mb-2">
 
-        </header>
+                📋 All Notices
 
-        {/* AI Search */}
+              </h2>
 
-        <AiSearchAssistant />
+              <p className="text-slate-500">
 
-        {/* Create Notice */}
+                Create, manage and organize all announcements.
 
-        <NoticeForm />
+              </p>
 
-        {/* Notice List */}
+            </div>
 
-        <NoticeList />
+            <NoticeList
+              notices={notices}
+              loading={loading}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+
+          </div>
+
+        </div>
 
       </div>
+
+      <AiSearchAssistant />
 
     </main>
   );
