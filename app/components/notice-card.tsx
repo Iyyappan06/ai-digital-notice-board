@@ -1,22 +1,17 @@
 "use client";
 
 import { useState } from "react";
-
 import type { Notice } from "@/lib/notices";
 
 interface NoticeCardProps {
   notice: Notice;
-
   onEdit: (notice: Notice) => void;
-
   onDelete: (id: string) => void;
 }
 
 export default function NoticeCard({
   notice,
-
   onEdit,
-
   onDelete,
 }: NoticeCardProps) {
   const [confirming, setConfirming] =
@@ -48,7 +43,7 @@ export default function NoticeCard({
       "bg-amber-100 text-amber-700",
 
     Hostel:
-      "bg-teal-100 text-teal-700",
+      "bg-cyan-100 text-cyan-700",
   };
 
   const colorClass =
@@ -64,9 +59,7 @@ export default function NoticeCard({
       "en-IN",
       {
         day: "numeric",
-
         month: "short",
-
         year: "numeric",
       }
     );
@@ -79,9 +72,7 @@ export default function NoticeCard({
           "en-IN",
           {
             day: "numeric",
-
             month: "short",
-
             year: "numeric",
           }
         )
@@ -91,72 +82,101 @@ export default function NoticeCard({
     <div
       className={`
       group
-
       relative
-
       overflow-hidden
-
-      bg-white
-
-      rounded-3xl
-
-      p-8
-
-      shadow-sm
-
+      rounded-[32px]
       border
-
+      backdrop-blur-xl
+      bg-white/85
+      p-8
+      shadow-soft
       transition-all
-
-      duration-300
-
+      duration-500
       hover:-translate-y-2
-
-      hover:shadow-2xl
+      hover:shadow-premium
 
       ${
         notice.important
           ? "border-indigo-300"
-
-          : "border-slate-200"
+          : "border-white"
       }
     `}
     >
-      {/* Top Border */}
+      {/* Glow Layer */}
+
+      <div
+        className="
+        absolute
+        inset-0
+        opacity-0
+        group-hover:opacity-100
+        transition
+        duration-500
+        bg-gradient-to-br
+        from-indigo-500/5
+        via-purple-500/5
+        to-cyan-500/5
+      "
+      />
+
+      {/* Important Border */}
 
       {notice.important && (
-
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-600 to-violet-600" />
-
+        <div
+          className="
+          absolute
+          top-0
+          left-0
+          right-0
+          h-1.5
+          bg-gradient-to-r
+          from-indigo-600
+          via-purple-600
+          to-cyan-500
+        "
+        />
       )}
 
-      {/* Header */}
+      {/* HEADER */}
 
-      <div className="flex justify-between items-start gap-4 mb-6">
+      <div className="relative flex justify-between items-start gap-4 mb-6">
 
         <div className="flex flex-wrap gap-3">
 
           <span
-            className={`px-4 py-1 rounded-full text-xs font-semibold ${colorClass}`}
+            className={`
+            px-4
+            py-1.5
+            rounded-full
+            text-xs
+            font-semibold
+            ${colorClass}
+          `}
           >
-
             {notice.category}
-
           </span>
 
           {notice.important && (
-
-            <span className="px-4 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700">
-
+            <span
+              className="
+              px-4
+              py-1.5
+              rounded-full
+              text-xs
+              font-semibold
+              bg-gradient-to-r
+              from-indigo-600
+              to-purple-600
+              text-white
+            "
+            >
               📌 Important
-
             </span>
-
           )}
 
         </div>
 
-        {/* Buttons */}
+        {/* ACTIONS */}
 
         <div className="flex gap-2">
 
@@ -164,18 +184,20 @@ export default function NoticeCard({
             onClick={() =>
               onEdit(notice)
             }
-
-            className="w-10 h-10 rounded-xl bg-slate-100 hover:bg-indigo-100 hover:text-indigo-700 transition"
-
             title="Edit"
+            className="
+            h-10
+            w-10
+            rounded-xl
+            bg-slate-100
+            hover:bg-indigo-100
+            hover:text-indigo-700
+          "
           >
-
             ✏️
-
           </button>
 
           {confirming ? (
-
             <div className="flex gap-2">
 
               <button
@@ -184,12 +206,18 @@ export default function NoticeCard({
                     notice.id
                   )
                 }
-
-                className="px-3 py-2 rounded-xl bg-red-500 text-white hover:bg-red-600 text-sm font-medium"
+                className="
+                px-3
+                py-2
+                rounded-xl
+                bg-red-500
+                text-white
+                text-sm
+                font-medium
+                hover:bg-red-600
+              "
               >
-
                 Delete
-
               </button>
 
               <button
@@ -198,94 +226,112 @@ export default function NoticeCard({
                     false
                   )
                 }
-
-                className="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-sm"
+                className="
+                px-3
+                py-2
+                rounded-xl
+                bg-slate-200
+                hover:bg-slate-300
+                text-sm
+              "
               >
-
                 Cancel
-
               </button>
 
             </div>
-
           ) : (
-
             <button
               onClick={() =>
                 setConfirming(
                   true
                 )
               }
-
-              className="w-10 h-10 rounded-xl bg-slate-100 hover:bg-red-100 hover:text-red-600 transition"
-
               title="Delete"
+              className="
+              h-10
+              w-10
+              rounded-xl
+              bg-slate-100
+              hover:bg-red-100
+              hover:text-red-600
+            "
             >
-
               🗑️
-
             </button>
-
           )}
 
         </div>
 
       </div>
 
-      {/* Title */}
+      {/* TITLE */}
 
-      <h2 className="text-2xl font-bold text-slate-900 mb-4 leading-tight">
-
+      <h2
+        className="
+        relative
+        text-2xl
+        font-black
+        text-slate-900
+        mb-4
+        leading-tight
+      "
+      >
         {notice.title}
-
       </h2>
 
-      {/* Description */}
+      {/* DESCRIPTION */}
 
-      <p className="text-slate-600 leading-8 text-base line-clamp-4">
-
+      <p
+        className="
+        relative
+        text-slate-600
+        leading-8
+        text-base
+        line-clamp-4
+      "
+      >
         {notice.description}
-
       </p>
 
-      {/* Footer */}
+      {/* FOOTER */}
 
-      <div className="mt-8 pt-6 border-t border-slate-200 flex justify-between items-center">
+      <div
+        className="
+        relative
+        mt-8
+        pt-6
+        border-t
+        border-slate-200
+        flex
+        justify-between
+        items-center
+      "
+      >
 
         <div>
 
           <p className="text-xs text-slate-400">
-
-            Posted
-
+            Posted On
           </p>
 
           <p className="font-semibold text-slate-700">
-
             {createdDate}
-
           </p>
 
         </div>
 
         {expiryDate && (
-
           <div className="text-right">
 
             <p className="text-xs text-slate-400">
-
               Expires
-
             </p>
 
-            <p className="font-semibold text-orange-600">
-
+            <p className="font-semibold text-orange-500">
               {expiryDate}
-
             </p>
 
           </div>
-
         )}
 
       </div>

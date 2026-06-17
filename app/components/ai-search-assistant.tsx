@@ -8,16 +8,18 @@ interface Message {
 }
 
 const SUGGESTED_QUESTIONS = [
-  "When is the semester exam?",
-  "Any placement training this week?",
-  "When will the library be closed?",
-  "Any hackathon announcements?",
+  "📅 When is the semester exam?",
+  "💼 Any placement drives this week?",
+  "📚 Library holiday announcements?",
+  "🚀 Any hackathon events?",
 ];
 
 export default function AiSearchAssistant() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] =
+    useState(false);
 
-  const [input, setInput] = useState("");
+  const [input, setInput] =
+    useState("");
 
   const [messages, setMessages] =
     useState<Message[]>([]);
@@ -47,10 +49,8 @@ export default function AiSearchAssistant() {
 
     setMessages((prev) => [
       ...prev,
-
       {
         role: "user",
-
         content: q,
       },
     ]);
@@ -62,12 +62,10 @@ export default function AiSearchAssistant() {
         "/api/ai/search",
         {
           method: "POST",
-
           headers: {
             "Content-Type":
               "application/json",
           },
-
           body: JSON.stringify({
             question: q,
           }),
@@ -86,10 +84,8 @@ export default function AiSearchAssistant() {
 
       setMessages((prev) => [
         ...prev,
-
         {
           role: "ai",
-
           content:
             data.answer,
         },
@@ -97,10 +93,8 @@ export default function AiSearchAssistant() {
     } catch (error) {
       setMessages((prev) => [
         ...prev,
-
         {
           role: "ai",
-
           content:
             error instanceof Error
               ? error.message
@@ -120,14 +114,13 @@ export default function AiSearchAssistant() {
       !e.shiftKey
     ) {
       e.preventDefault();
-
       sendMessage(input);
     }
   }
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating AI Button */}
 
       <button
         onClick={() =>
@@ -135,80 +128,64 @@ export default function AiSearchAssistant() {
         }
         className="
         fixed
-
         bottom-8
-
         right-8
-
         z-50
 
-        h-16
-
-        w-16
+        h-20
+        w-20
 
         rounded-full
 
-        bg-gradient-to-r
-
+        bg-gradient-to-br
         from-indigo-600
-
-        to-violet-600
+        via-purple-600
+        to-cyan-500
 
         text-white
+        text-3xl
 
-        shadow-2xl
+        shadow-[0_20px_60px_rgba(99,102,241,.45)]
 
         hover:scale-110
-
+        transition-all
         duration-300
 
-        flex
-
-        items-center
-
-        justify-center
-
-        text-2xl
+        animate-glow
       "
       >
         {open ? "✕" : "🤖"}
       </button>
 
-      {/* Chat Window */}
+      {/* Window */}
 
       {open && (
-
         <div
           className="
           fixed
-
-          bottom-28
-
+          bottom-32
           right-8
-
           z-50
 
-          w-[430px]
-
+          w-[460px]
           max-w-[95vw]
 
-          h-[700px]
+          h-[720px]
 
-          bg-white
+          rounded-[36px]
 
-          rounded-3xl
-
-          shadow-2xl
+          bg-white/85
+          backdrop-blur-2xl
 
           border
+          border-white/60
 
-          border-slate-200
-
-          flex
-
-          flex-col
+          shadow-[0_30px_80px_rgba(0,0,0,.15)]
 
           overflow-hidden
+
+          flex
+          flex-col
         "
         >
 
@@ -216,60 +193,54 @@ export default function AiSearchAssistant() {
 
           <div
             className="
-            h-20
-
             bg-gradient-to-r
-
             from-indigo-600
+            via-purple-600
+            to-cyan-500
 
-            to-violet-600
+            p-6
 
-            px-6
-
-            flex
-
-            items-center
-
-            justify-between
+            text-white
           "
           >
 
-            <div>
+            <div className="flex items-center justify-between">
 
-              <p className="text-white text-xl font-bold">
+              <div>
 
-                🤖 AI Assistant
+                <p className="text-xs tracking-[3px] uppercase font-semibold text-indigo-100">
+                  AI Assistant
+                </p>
 
-              </p>
+                <h2 className="text-2xl font-black">
+                  Notice Copilot
+                </h2>
 
-              <p className="text-indigo-100 text-sm">
+                <p className="text-sm text-indigo-100 mt-1">
+                  Ask anything about notices
+                </p>
 
-                Ask anything about notices
+              </div>
 
-              </p>
+              <div
+                className="
+                h-14
+                w-14
 
-            </div>
+                rounded-2xl
 
-            <div
-              className="
-              h-12
+                bg-white/20
 
-              w-12
+                flex
+                items-center
+                justify-center
 
-              rounded-full
+                text-3xl
+              "
+              >
+                🧠
+              </div>
 
-              bg-white/20
-
-              flex
-
-              items-center
-
-              justify-center
-
-              text-2xl
-            "
-            >
-              🧠
             </div>
 
           </div>
@@ -279,58 +250,42 @@ export default function AiSearchAssistant() {
           <div
             className="
             flex-1
-
             overflow-y-auto
-
-            p-6
-
+            p-5
             space-y-4
-
-            bg-slate-50
           "
           >
 
             {messages.length === 0 && (
-
               <>
+                <div className="text-center py-6">
 
-                <div className="text-center">
-
-                  <div className="text-6xl mb-5">
-
+                  <div className="text-7xl mb-5">
                     🤖
-
                   </div>
 
-                  <h2 className="text-2xl font-bold">
-
-                    AI Search Assistant
-
+                  <h2 className="text-3xl font-black text-slate-900">
+                    AI Notice Assistant
                   </h2>
 
-                  <p className="text-slate-500 mt-2">
-
-                    Ask anything about notices.
-
+                  <p className="text-slate-500 mt-3">
+                    Instantly search announcements,
+                    events and academic notices.
                   </p>
 
                 </div>
 
-                <div className="space-y-3 mt-8">
+                <div className="space-y-3">
 
                   {SUGGESTED_QUESTIONS.map(
                     (q) => (
-
                       <button
                         key={q}
-
                         onClick={() =>
                           sendMessage(q)
                         }
-
                         className="
                         w-full
-
                         text-left
 
                         p-4
@@ -339,40 +294,32 @@ export default function AiSearchAssistant() {
 
                         bg-white
 
-                        hover:bg-indigo-50
-
                         border
-
                         border-slate-200
 
-                        transition
+                        hover:border-indigo-300
+                        hover:bg-indigo-50
+
+                        transition-all
                       "
                       >
-
                         {q}
-
                       </button>
-
                     )
                   )}
 
                 </div>
-
               </>
-
             )}
 
             {messages.map(
               (msg, index) => (
-
                 <div
                   key={index}
-
                   className={`flex ${
                     msg.role ===
                     "user"
                       ? "justify-end"
-
                       : "justify-start"
                   }`}
                 >
@@ -382,53 +329,46 @@ export default function AiSearchAssistant() {
                     max-w-[80%]
 
                     px-5
-
                     py-4
 
                     rounded-3xl
 
                     text-sm
-
                     leading-7
 
                     ${
                       msg.role ===
                       "user"
-
                         ? `
-                        bg-indigo-600
+                        bg-gradient-to-r
+                        from-indigo-600
+                        to-purple-600
 
                         text-white
 
                         rounded-br-md
                       `
-
                         : `
                         bg-white
 
                         border
-
                         border-slate-200
 
-                        rounded-bl-md
-
                         text-slate-700
+
+                        rounded-bl-md
                       `
                     }
                   `}
                   >
-
                     {msg.content}
-
                   </div>
 
                 </div>
-
               )
             )}
 
             {loading && (
-
               <div className="flex">
 
                 <div
@@ -436,23 +376,26 @@ export default function AiSearchAssistant() {
                   bg-white
 
                   border
-
                   border-slate-200
 
-                  px-5
-
-                  py-4
-
                   rounded-3xl
+
+                  px-5
+                  py-4
                 "
                 >
 
-                  Thinking...
+                  <div className="flex gap-2">
+
+                    <div className="h-2 w-2 rounded-full bg-indigo-500 animate-bounce" />
+                    <div className="h-2 w-2 rounded-full bg-purple-500 animate-bounce delay-100" />
+                    <div className="h-2 w-2 rounded-full bg-cyan-500 animate-bounce delay-200" />
+
+                  </div>
 
                 </div>
 
               </div>
-
             )}
 
             <div ref={bottomRef} />
@@ -464,10 +407,9 @@ export default function AiSearchAssistant() {
           <div
             className="
             p-5
-
             border-t
-
-            bg-white
+            border-slate-200
+            bg-white/70
           "
           >
 
@@ -475,23 +417,17 @@ export default function AiSearchAssistant() {
 
               <input
                 type="text"
-
                 value={input}
-
                 disabled={loading}
-
                 onChange={(e) =>
                   setInput(
                     e.target.value
                   )
                 }
-
                 onKeyDown={
                   handleKeyDown
                 }
-
-                placeholder="Ask AI something..."
-
+                placeholder="Ask AI about notices..."
                 className="
                 flex-1
 
@@ -502,11 +438,11 @@ export default function AiSearchAssistant() {
                 rounded-2xl
 
                 border
-
                 border-slate-300
 
-                focus:ring-4
+                bg-white
 
+                focus:ring-4
                 focus:ring-indigo-200
               "
               />
@@ -516,30 +452,27 @@ export default function AiSearchAssistant() {
                   loading ||
                   !input.trim()
                 }
-
                 onClick={() =>
                   sendMessage(input)
                 }
-
                 className="
-                w-14
-
                 h-14
+                w-14
 
                 rounded-2xl
 
-                bg-indigo-600
-
-                hover:bg-indigo-700
+                bg-gradient-to-r
+                from-indigo-600
+                to-purple-600
 
                 text-white
 
                 text-xl
+
+                hover:scale-105
               "
               >
-
                 ➤
-
               </button>
 
             </div>
@@ -547,7 +480,6 @@ export default function AiSearchAssistant() {
           </div>
 
         </div>
-
       )}
     </>
   );
