@@ -149,30 +149,30 @@ export default function NoticeList({
         }}
       >
 
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div className="flex flex-col items-center justify-center text-center gap-4">
 
-          <div>
+          <div className="w-full text-center">
 
-            <h2
-              className="text-4xl font-extrabold"
-              style={{
-                color: "#F8FAFC",
-              }}
-            >
-              All Notices
-            </h2>
+  <h2
+    className="text-4xl font-extrabold"
+    style={{
+      color: "#F8FAFC",
+      fontFamily: "'Plus Jakarta Sans',sans-serif",
+    }}
+  >
+    All Notices
+  </h2>
 
-            <p
-              className="mt-2"
-              style={{
-                color: "#94A3B8",
-              }}
-            >
-              Create, manage and organize announcements
-            </p>
+  <p
+    className="mt-2 text-base"
+    style={{
+      color: "#94A3B8",
+    }}
+  >
+    Create, manage and organize announcements
+  </p>
 
-          </div>
-
+</div>
           <div
             className="
             px-6
@@ -191,14 +191,23 @@ export default function NoticeList({
                 "linear-gradient(135deg,rgba(124,58,237,0.2),rgba(6,182,212,0.15))",
             }}
           >
-            {notices.length} Notices
+            
           </div>
 
         </div>
 
         {/* TABS */}
 
-        <div className="flex gap-4 mt-8 flex-wrap">
+        <div
+  className="
+  flex
+  justify-center
+  items-center
+  gap-8
+  mt-4
+  flex-wrap
+  "
+>
 
           <button
             onClick={() =>
