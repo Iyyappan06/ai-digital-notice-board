@@ -61,9 +61,7 @@ export default function NoticesPage() {
     notice: Notice
   ) {
 
-    router.push(
-      `/publish?id=${notice.id}`
-    );
+    router.push(`/publish/${notice.id}`);
 
   }
 
