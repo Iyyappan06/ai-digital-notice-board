@@ -9,333 +9,458 @@ interface NoticeCardProps {
   onDelete: (id: string) => void;
 }
 
+const CATEGORY_CONFIG: Record<
+  string,
+  {
+    gradient: string;
+    text: string;
+    dot: string;
+    glow: string;
+  }
+> = {
+  General: {
+    gradient: "rgba(100,116,139,0.18)",
+    text: "#94A3B8",
+    dot: "#64748B",
+    glow: "rgba(100,116,139,0.12)",
+  },
+
+  Academics: {
+    gradient: "rgba(56,189,248,0.18)",
+    text: "#38BDF8",
+    dot: "#0EA5E9",
+    glow: "rgba(56,189,248,0.12)",
+  },
+
+  Placement: {
+    gradient: "rgba(124,58,237,0.18)",
+    text: "#A78BFA",
+    dot: "#7C3AED",
+    glow: "rgba(124,58,237,0.12)",
+  },
+
+  Events: {
+    gradient: "rgba(245,158,11,0.18)",
+    text: "#FCD34D",
+    dot: "#F59E0B",
+    glow: "rgba(245,158,11,0.12)",
+  },
+
+  Sports: {
+    gradient: "rgba(16,185,129,0.18)",
+    text: "#34D399",
+    dot: "#10B981",
+    glow: "rgba(16,185,129,0.12)",
+  },
+
+  Administration: {
+    gradient: "rgba(244,63,94,0.18)",
+    text: "#FB7185",
+    dot: "#F43F5E",
+    glow: "rgba(244,63,94,0.12)",
+  },
+
+  Library: {
+    gradient: "rgba(251,146,60,0.18)",
+    text: "#FDBA74",
+    dot: "#FB923C",
+    glow: "rgba(251,146,60,0.12)",
+  },
+
+  Hostel: {
+    gradient: "rgba(6,182,212,0.18)",
+    text: "#67E8F9",
+    dot: "#06B6D4",
+    glow: "rgba(6,182,212,0.12)",
+  },
+};
+
+const CATEGORY_ICONS: Record<string, string> = {
+  General: "📋",
+  Academics: "📚",
+  Placement: "💼",
+  Events: "🎉",
+  Sports: "⚽",
+  Administration: "🏛️",
+  Library: "📖",
+  Hostel: "🏠",
+};
+
 export default function NoticeCard({
   notice,
   onEdit,
   onDelete,
 }: NoticeCardProps) {
-  const [confirming, setConfirming] =
-    useState(false);
+  const [hovered, setHovered] = useState(false);
 
-  const categoryColors: Record<
-    string,
-    string
-  > = {
-    General:
-      "bg-slate-100 text-slate-700",
+  const cfg =
+    CATEGORY_CONFIG[notice.category] ??
+    CATEGORY_CONFIG.General;
 
-    Academics:
-      "bg-blue-100 text-blue-700",
+  const createdDate = new Date(
+    notice.created_at
+  ).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+  });
 
-    Placement:
-      "bg-purple-100 text-purple-700",
-
-    Events:
-      "bg-orange-100 text-orange-700",
-
-    Sports:
-      "bg-green-100 text-green-700",
-
-    Administration:
-      "bg-red-100 text-red-700",
-
-    Library:
-      "bg-amber-100 text-amber-700",
-
-    Hostel:
-      "bg-cyan-100 text-cyan-700",
-  };
-
-  const colorClass =
-    categoryColors[
-      notice.category
-    ] ??
-    "bg-slate-100 text-slate-700";
-
-  const createdDate =
-    new Date(
-      notice.created_at
-    ).toLocaleDateString(
-      "en-IN",
-      {
+  const expiryDate = notice.expiry_date
+    ? new Date(
+        notice.expiry_date
+      ).toLocaleDateString("en-IN", {
         day: "numeric",
         month: "short",
-        year: "numeric",
-      }
-    );
-
-  const expiryDate =
-    notice.expiry_date
-      ? new Date(
-          notice.expiry_date
-        ).toLocaleDateString(
-          "en-IN",
-          {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-          }
-        )
-      : null;
+      })
+    : null;
 
   return (
     <div
-      className={`
-      group
-      relative
-      overflow-hidden
-      rounded-[32px]
-      border
-      backdrop-blur-xl
-      bg-white/85
-      p-8
-      shadow-soft
-      transition-all
-      duration-500
-      hover:-translate-y-2
-      hover:shadow-premium
-
-      ${
-        notice.important
-          ? "border-indigo-300"
-          : "border-white"
+      onMouseEnter={() =>
+        setHovered(true)
       }
-    `}
+      onMouseLeave={() =>
+        setHovered(false)
+      }
+      style={{
+        position: "relative",
+
+        overflow: "hidden",
+
+        borderRadius: "30px",
+
+        minHeight: "340px",
+
+        background: hovered
+          ? "rgba(22,30,51,0.96)"
+          : "rgba(17,24,39,0.92)",
+
+        border: notice.important
+          ? "1px solid rgba(244,63,94,0.25)"
+          : "1px solid rgba(255,255,255,0.08)",
+
+        transform: hovered
+          ? "translateY(-6px)"
+          : "translateY(0)",
+
+        transition: "0.3s ease",
+
+        boxShadow: hovered
+          ? `0 20px 50px ${cfg.glow}`
+          : "0 10px 30px rgba(0,0,0,0.3)",
+      }}
     >
-      {/* Glow Layer */}
+      {/* Glow */}
 
       <div
-        className="
-        absolute
-        inset-0
-        opacity-0
-        group-hover:opacity-100
-        transition
-        duration-500
-        bg-gradient-to-br
-        from-indigo-500/5
-        via-purple-500/5
-        to-cyan-500/5
-      "
+        style={{
+          position: "absolute",
+
+          right: "-30px",
+
+          top: "-30px",
+
+          width: "180px",
+
+          height: "180px",
+
+          borderRadius: "50%",
+
+          background: cfg.gradient,
+
+          filter: "blur(60px)",
+        }}
       />
 
-      {/* Important Border */}
+      <div
+        style={{
+          padding: "30px",
 
-      {notice.important && (
+          position: "relative",
+
+          display: "flex",
+
+          flexDirection: "column",
+
+          height: "100%",
+        }}
+      >
+        {/* TOP */}
+
         <div
-          className="
-          absolute
-          top-0
-          left-0
-          right-0
-          h-1.5
-          bg-gradient-to-r
-          from-indigo-600
-          via-purple-600
-          to-cyan-500
-        "
-        />
-      )}
+          style={{
+            display: "flex",
 
-      {/* HEADER */}
+            justifyContent:
+              "space-between",
 
-      <div className="relative flex justify-between items-start gap-4 mb-6">
+            alignItems:
+              "flex-start",
 
-        <div className="flex flex-wrap gap-3">
+            marginBottom: "24px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
 
-          <span
-            className={`
-            px-4
-            py-1.5
-            rounded-full
-            text-xs
-            font-semibold
-            ${colorClass}
-          `}
+              flexWrap: "wrap",
+
+              gap: "10px",
+            }}
           >
-            {notice.category}
-          </span>
-
-          {notice.important && (
             <span
-              className="
-              px-4
-              py-1.5
-              rounded-full
-              text-xs
-              font-semibold
-              bg-gradient-to-r
-              from-indigo-600
-              to-purple-600
-              text-white
-            "
+              style={{
+                padding:
+                  "8px 14px",
+
+                borderRadius:
+                  "999px",
+
+                background:
+                  cfg.gradient,
+
+                color: cfg.text,
+
+                fontSize:
+                  "13px",
+
+                fontWeight:
+                  700,
+              }}
             >
-              📌 Important
+              {
+                CATEGORY_ICONS[
+                  notice.category
+                ]
+              }{" "}
+              {notice.category}
             </span>
-          )}
 
-        </div>
+            {notice.important && (
+              <span
+                style={{
+                  padding:
+                    "8px 14px",
 
-        {/* ACTIONS */}
+                  borderRadius:
+                    "999px",
 
-        <div className="flex gap-2">
+                  background:
+                    "rgba(244,63,94,0.15)",
 
-          <button
-            onClick={() =>
-              onEdit(notice)
-            }
-            title="Edit"
-            className="
-            h-10
-            w-10
-            rounded-xl
-            bg-slate-100
-            hover:bg-indigo-100
-            hover:text-indigo-700
-          "
+                  color:
+                    "#FB7185",
+
+                  fontSize:
+                    "13px",
+
+                  fontWeight:
+                    700,
+                }}
+              >
+                📌 Important
+              </span>
+            )}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+
+              gap: "10px",
+            }}
           >
-            ✏️
-          </button>
-
-          {confirming ? (
-            <div className="flex gap-2">
-
-              <button
-                onClick={() =>
-                  onDelete(
-                    notice.id
-                  )
-                }
-                className="
-                px-3
-                py-2
-                rounded-xl
-                bg-red-500
-                text-white
-                text-sm
-                font-medium
-                hover:bg-red-600
-              "
-              >
-                Delete
-              </button>
-
-              <button
-                onClick={() =>
-                  setConfirming(
-                    false
-                  )
-                }
-                className="
-                px-3
-                py-2
-                rounded-xl
-                bg-slate-200
-                hover:bg-slate-300
-                text-sm
-              "
-              >
-                Cancel
-              </button>
-
-            </div>
-          ) : (
             <button
               onClick={() =>
-                setConfirming(
-                  true
+                onEdit(notice)
+              }
+              style={{
+                width: "42px",
+
+                height: "42px",
+
+                borderRadius:
+                  "14px",
+
+                border: "none",
+
+                cursor: "pointer",
+
+                background:
+                  "rgba(99,102,241,0.15)",
+
+                color:
+                  "#818CF8",
+              }}
+            >
+              ✏️
+            </button>
+
+            <button
+              onClick={() =>
+                onDelete(
+                  notice.id
                 )
               }
-              title="Delete"
-              className="
-              h-10
-              w-10
-              rounded-xl
-              bg-slate-100
-              hover:bg-red-100
-              hover:text-red-600
-            "
+              style={{
+                width: "42px",
+
+                height: "42px",
+
+                borderRadius:
+                  "14px",
+
+                border: "none",
+
+                cursor: "pointer",
+
+                background:
+                  "rgba(244,63,94,0.15)",
+
+                color:
+                  "#FB7185",
+              }}
             >
               🗑️
             </button>
-          )}
-
-        </div>
-
-      </div>
-
-      {/* TITLE */}
-
-      <h2
-        className="
-        relative
-        text-2xl
-        font-black
-        text-slate-900
-        mb-4
-        leading-tight
-      "
-      >
-        {notice.title}
-      </h2>
-
-      {/* DESCRIPTION */}
-
-      <p
-        className="
-        relative
-        text-slate-600
-        leading-8
-        text-base
-        line-clamp-4
-      "
-      >
-        {notice.description}
-      </p>
-
-      {/* FOOTER */}
-
-      <div
-        className="
-        relative
-        mt-8
-        pt-6
-        border-t
-        border-slate-200
-        flex
-        justify-between
-        items-center
-      "
-      >
-
-        <div>
-
-          <p className="text-xs text-slate-400">
-            Posted On
-          </p>
-
-          <p className="font-semibold text-slate-700">
-            {createdDate}
-          </p>
-
-        </div>
-
-        {expiryDate && (
-          <div className="text-right">
-
-            <p className="text-xs text-slate-400">
-              Expires
-            </p>
-
-            <p className="font-semibold text-orange-500">
-              {expiryDate}
-            </p>
-
           </div>
-        )}
+        </div>
 
+        {/* TITLE */}
+
+        <h2
+          style={{
+            fontSize: "24px",
+
+            fontWeight: 800,
+
+            color: "#F8FAFC",
+
+            lineHeight: "1.4",
+
+            marginBottom: "18px",
+
+            fontFamily:
+              "'Plus Jakarta Sans',sans-serif",
+          }}
+        >
+          {notice.title}
+        </h2>
+
+        {/* DESCRIPTION */}
+
+        <p
+          style={{
+            color: "#94A3B8",
+
+            lineHeight: "1.9",
+
+            fontSize: "15px",
+
+            flex: 1,
+
+            display: "-webkit-box",
+
+            WebkitLineClamp: 3,
+
+            WebkitBoxOrient:
+              "vertical",
+
+            overflow: "hidden",
+          }}
+        >
+          {notice.description}
+        </p>
+
+        {/* FOOTER */}
+
+        <div
+          style={{
+            marginTop: "30px",
+
+            paddingTop: "22px",
+
+            borderTop:
+              "1px solid rgba(255,255,255,0.08)",
+
+            display: "flex",
+
+            justifyContent:
+              "space-between",
+          }}
+        >
+          <div>
+            <p
+              style={{
+                fontSize: "11px",
+
+                color: "#64748B",
+
+                textTransform:
+                  "uppercase",
+
+                fontWeight: 700,
+              }}
+            >
+              Posted
+            </p>
+
+            <p
+              style={{
+                color: "#CBD5E1",
+
+                fontWeight: 700,
+
+                marginTop: "4px",
+              }}
+            >
+              {createdDate}
+            </p>
+          </div>
+
+          {expiryDate && (
+            <div
+              style={{
+                textAlign:
+                  "right",
+              }}
+            >
+              <p
+                style={{
+                  fontSize:
+                    "11px",
+
+                  color:
+                    "#64748B",
+
+                  textTransform:
+                    "uppercase",
+
+                  fontWeight:
+                    700,
+                }}
+              >
+                Expires
+              </p>
+
+              <p
+                style={{
+                  color:
+                    "#FB923C",
+
+                  fontWeight:
+                    700,
+
+                  marginTop:
+                    "4px",
+                }}
+              >
+                {expiryDate}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
-
     </div>
   );
 }

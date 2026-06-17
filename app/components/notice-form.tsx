@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
 import type { Notice } from "@/lib/notices";
 import { CATEGORIES } from "@/lib/notices";
 
@@ -44,11 +45,16 @@ export default function NoticeForm({
     if (editNotice) {
       setForm({
         title: editNotice.title,
+
         description:
           editNotice.description,
-        category: editNotice.category,
+
+        category:
+          editNotice.category,
+
         important:
           editNotice.important,
+
         expiry_date:
           editNotice.expiry_date ?? "",
       });
@@ -75,6 +81,7 @@ export default function NoticeForm({
 
     setForm((prev) => ({
       ...prev,
+
       [target.name]: value,
     }));
   };
@@ -93,6 +100,7 @@ export default function NoticeForm({
       setError(
         "Title and description are required."
       );
+
       return;
     }
 
@@ -109,12 +117,15 @@ export default function NoticeForm({
 
       const res = await fetch(url, {
         method,
+
         headers: {
           "Content-Type":
             "application/json",
         },
+
         body: JSON.stringify({
           ...form,
+
           expiry_date:
             form.expiry_date || null,
         }),
@@ -122,11 +133,12 @@ export default function NoticeForm({
 
       const data = await res.json();
 
-      if (!res.ok)
+      if (!res.ok) {
         throw new Error(
           data.error ??
             "Something went wrong."
         );
+      }
 
       setForm(EMPTY_FORM);
 
@@ -145,37 +157,61 @@ export default function NoticeForm({
   return (
     <div
       className="
-      glass
+      w-full
+      overflow-hidden
       rounded-[32px]
       p-8
-      shadow-premium
       border
-      border-white/60
     "
+      style={{
+        background:
+          "rgba(17,24,39,0.9)",
+
+        backdropFilter:
+          "blur(18px)",
+
+        border:
+          "1px solid rgba(255,255,255,0.08)",
+
+        boxShadow:
+          "0 16px 40px rgba(0,0,0,0.35)",
+      }}
     >
       {/* HEADER */}
 
-      <div className="mb-8">
+      <div className="mb-10">
 
         <div className="flex justify-between items-start">
 
           <div>
 
-            <p className="uppercase tracking-[4px] text-xs font-bold text-indigo-500 mb-2">
-              NOTICE PANEL
+            <p
+              className="
+              text-xs
+              font-bold
+              tracking-[0.28em]
+              mb-10
+              p1-2
+            "
+              style={{
+                color: "#A78BFA",
+                paddingLeft: "16px",
+              }}
+            >
+                NOTICE PANEL
             </p>
 
             <h2
               className="
               text-4xl
-              font-black
-              bg-gradient-to-r
-              from-indigo-600
-              via-purple-600
-              to-cyan-500
-              bg-clip-text
-              text-transparent
+              font-extrabold
             "
+              style={{
+                color: "#F8FAFC",
+
+                fontFamily:
+                  "'Plus Jakarta Sans',sans-serif",
+              }}
             >
               {editNotice
                 ? "Edit Notice"
@@ -185,19 +221,30 @@ export default function NoticeForm({
           </div>
 
           {editNotice && (
+
             <button
+              type="button"
               onClick={onCancel}
               className="
               px-4
               py-2
               rounded-xl
-              bg-slate-100
-              hover:bg-slate-200
-              font-medium
+              transition
             "
+              style={{
+                background:
+                  "rgba(255,255,255,0.06)",
+
+                color:
+                  "#CBD5E1",
+
+                border:
+                  "1px solid rgba(255,255,255,0.08)",
+              }}
             >
               Cancel
             </button>
+
           )}
 
         </div>
@@ -207,30 +254,50 @@ export default function NoticeForm({
       {/* ERROR */}
 
       {error && (
+
         <div
           className="
           mb-6
           rounded-2xl
-          border
-          border-red-200
-          bg-red-50
           p-4
-          text-red-600
         "
+          style={{
+            background:
+              "rgba(244,63,94,0.15)",
+
+            border:
+              "1px solid rgba(244,63,94,0.25)",
+
+            color:
+              "#FB7185",
+          }}
         >
           {error}
         </div>
+
       )}
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-6"
+        className="space-y-7"
       >
+
         {/* TITLE */}
 
         <div>
 
-          <label className="block mb-2 text-sm font-semibold text-slate-700">
+          <label
+            className="
+            block
+            mb-3
+            text-sm
+            font-semibold
+          "
+            style={{
+              color:
+                "#CBD5E1",
+            }}
+          >
             Notice Title
           </label>
 
@@ -240,14 +307,22 @@ export default function NoticeForm({
             onChange={handleChange}
             placeholder="Enter notice title..."
             className="
-            glass-input
             w-full
             h-14
             px-5
             rounded-2xl
-            border
-            border-slate-200
+            outline-none
           "
+            style={{
+              background:
+                "rgba(255,255,255,0.05)",
+
+              color:
+                "#F8FAFC",
+
+              border:
+                "1px solid rgba(255,255,255,0.08)",
+            }}
           />
 
         </div>
@@ -256,7 +331,18 @@ export default function NoticeForm({
 
         <div>
 
-          <label className="block mb-2 text-sm font-semibold text-slate-700">
+          <label
+            className="
+            block
+            mb-3
+            text-sm
+            font-semibold
+          "
+            style={{
+              color:
+                "#CBD5E1",
+            }}
+          >
             Description
           </label>
 
@@ -267,25 +353,44 @@ export default function NoticeForm({
             rows={6}
             placeholder="Write your notice details..."
             className="
-            glass-input
             w-full
             p-5
             rounded-2xl
-            border
-            border-slate-200
             resize-none
+            outline-none
           "
+            style={{
+              background:
+                "rgba(255,255,255,0.05)",
+
+              color:
+                "#F8FAFC",
+
+              border:
+                "1px solid rgba(255,255,255,0.08)",
+            }}
           />
 
         </div>
 
         {/* CATEGORY + DATE */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
           <div>
 
-            <label className="block mb-2 text-sm font-semibold text-slate-700">
+            <label
+              className="
+              block
+              mb-3
+              text-sm
+              font-semibold
+            "
+              style={{
+                color:
+                  "#CBD5E1",
+              }}
+            >
               Category
             </label>
 
@@ -294,30 +399,53 @@ export default function NoticeForm({
               value={form.category}
               onChange={handleChange}
               className="
-              glass-input
               w-full
               h-14
               px-4
               rounded-2xl
-              border
-              border-slate-200
+              outline-none
             "
+              style={{
+                background:
+                  "rgba(255,255,255,0.05)",
+
+                color:
+                  "#F8FAFC",
+
+                border:
+                  "1px solid rgba(255,255,255,0.08)",
+              }}
             >
+
               {CATEGORIES.map((cat) => (
+
                 <option
                   key={cat}
                   value={cat}
                 >
                   {cat}
                 </option>
+
               ))}
+
             </select>
 
           </div>
 
           <div>
 
-            <label className="block mb-2 text-sm font-semibold text-slate-700">
+            <label
+              className="
+              block
+              mb-3
+              text-sm
+              font-semibold
+            "
+              style={{
+                color:
+                  "#CBD5E1",
+              }}
+            >
               Expiry Date
             </label>
 
@@ -332,21 +460,29 @@ export default function NoticeForm({
                   .split("T")[0]
               }
               className="
-              glass-input
               w-full
               h-14
               px-4
               rounded-2xl
-              border
-              border-slate-200
+              outline-none
             "
+              style={{
+                background:
+                  "rgba(255,255,255,0.05)",
+
+                color:
+                  "#F8FAFC",
+
+                border:
+                  "1px solid rgba(255,255,255,0.08)",
+              }}
             />
 
           </div>
 
         </div>
 
-        {/* IMPORTANT TOGGLE */}
+        {/* IMPORTANT */}
 
         <div
           className="
@@ -354,23 +490,42 @@ export default function NoticeForm({
           items-center
           justify-between
           rounded-2xl
-          bg-gradient-to-r
-          from-indigo-50
-          to-purple-50
-          border
-          border-indigo-100
           p-5
         "
+          style={{
+            background:
+              "rgba(124,58,237,0.12)",
+
+            border:
+              "1px solid rgba(124,58,237,0.25)",
+          }}
         >
 
           <div>
 
-            <p className="font-semibold text-slate-800">
+            <p
+              className="
+              font-semibold
+            "
+              style={{
+                color:
+                  "#F8FAFC",
+              }}
+            >
               📌 Important Notice
             </p>
 
-            <p className="text-sm text-slate-500">
-              Highlight this notice at the top
+            <p
+              className="
+              text-sm
+              mt-1
+            "
+              style={{
+                color:
+                  "#94A3B8",
+              }}
+            >
+              Highlight this notice
             </p>
 
           </div>
@@ -380,7 +535,11 @@ export default function NoticeForm({
             name="important"
             checked={form.important}
             onChange={handleChange}
-            className="h-6 w-6 accent-indigo-600"
+            className="
+            h-6
+            w-6
+            accent-violet-600
+          "
           />
 
         </div>
@@ -394,27 +553,29 @@ export default function NoticeForm({
           w-full
           h-14
           rounded-2xl
-          bg-gradient-to-r
-          from-indigo-600
-          via-purple-600
-          to-cyan-500
-          text-white
           text-lg
           font-bold
-          shadow-lg
-          hover:scale-[1.02]
-          transition-all
+          text-white
+          transition
           duration-300
+          hover:scale-[1.02]
         "
+          style={{
+            background:
+              "linear-gradient(135deg,#7C3AED,#06B6D4)",
+          }}
         >
+
           {loading
             ? "Saving..."
             : editNotice
             ? "Save Changes"
             : "Publish Notice"}
+
         </button>
 
       </form>
+
     </div>
   );
 }

@@ -1,24 +1,12 @@
 import "./globals.css";
+
 import type { Metadata } from "next";
-
-import { Poppins } from "next/font/google";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: [
-    "300",
-    "400",
-    "500",
-    "600",
-    "700",
-    "800",
-  ],
-});
 
 export const metadata: Metadata = {
   title: "AI Powered Digital Notice Board",
+
   description:
-    "Modern AI Powered Digital Notice Board with Smart Search Assistant",
+    "Digital Notice Board with Gemini AI Search Assistant",
 };
 
 export default function RootLayout({
@@ -27,63 +15,63 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      suppressHydrationWarning
+    >
+
+      <head>
+
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+          rel="stylesheet"
+        />
+
+      </head>
+
       <body
-        className={`
-          ${poppins.className}
-          min-h-screen
-          antialiased
-          text-slate-900
-        `}
+        className="
+        antialiased
+        overflow-x-hidden
+      "
+        style={{
+          minHeight: "100vh",
+
+          position: "relative",
+
+          zIndex: 0,
+
+          fontFamily:
+            "'Inter',sans-serif",
+
+          background:
+            "#050816",
+
+          color:
+            "#F8FAFC",
+        }}
       >
-        {/* Floating Background Shapes */}
-
-        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-          <div
-            className="
-              absolute
-              top-[-150px]
-              left-[-150px]
-              h-[400px]
-              w-[400px]
-              rounded-full
-              bg-indigo-400/15
-              blur-3xl
-              animate-float
-            "
-          />
-
-          <div
-            className="
-              absolute
-              top-[10%]
-              right-[-120px]
-              h-[350px]
-              w-[350px]
-              rounded-full
-              bg-purple-400/15
-              blur-3xl
-              animate-float
-            "
-          />
-
-          <div
-            className="
-              absolute
-              bottom-[-150px]
-              left-[35%]
-              h-[450px]
-              w-[450px]
-              rounded-full
-              bg-cyan-400/15
-              blur-3xl
-              animate-float
-            "
-          />
-        </div>
 
         {children}
+
       </body>
+
     </html>
   );
 }

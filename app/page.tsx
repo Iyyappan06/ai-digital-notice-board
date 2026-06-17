@@ -13,8 +13,11 @@ import {
 } from "@/lib/notices";
 
 export default function Page() {
-  const [notices, setNotices] = useState<Notice[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [notices, setNotices] =
+    useState<Notice[]>([]);
+
+  const [loading, setLoading] =
+    useState(true);
 
   const [editingNotice, setEditingNotice] =
     useState<Notice | null>(null);
@@ -23,7 +26,8 @@ export default function Page() {
     try {
       setLoading(true);
 
-      const data = await fetchNotices();
+      const data =
+        await fetchNotices();
 
       setNotices(data ?? []);
     } catch (error) {
@@ -39,11 +43,15 @@ export default function Page() {
     loadNotices();
   }, []);
 
-  function handleEdit(notice: Notice) {
+  function handleEdit(
+    notice: Notice
+  ) {
     setEditingNotice(notice);
   }
 
-  async function handleDelete(id: string) {
+  async function handleDelete(
+    id: string
+  ) {
     try {
       await deleteNotice(id);
 
@@ -51,7 +59,9 @@ export default function Page() {
     } catch (error) {
       console.error(error);
 
-      alert("Failed to delete notice.");
+      alert(
+        "Failed to delete notice."
+      );
     }
   }
 
@@ -65,187 +75,265 @@ export default function Page() {
     setEditingNotice(null);
   }
 
-  const importantCount = notices.filter(
-    (n) => n.important
-  ).length;
+  const importantCount =
+    notices.filter(
+      (n) => n.important
+    ).length;
 
   return (
-    <main className="min-h-screen">
+    <main
+      className="
+      min-h-screen
+      overflow-x-hidden
+    "
+      style={{
+        background:
+          "linear-gradient(180deg,#050816 0%,#081122 50%,#0A1327 100%)",
+      }}
+    >
 
-      {/* HEADER */}
+      {/* TOP NAVBAR */}
 
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/70 border-b border-white/40">
-        <div className="container-app">
+      <header
+        className="
+        sticky
+        top-0
+        z-50
+        border-b
+      "
+        style={{
+          background:
+            "rgba(5,10,22,0.92)",
 
-          <div className="flex items-center justify-between">
+          backdropFilter:
+            "blur(22px)",
 
-            <div className="flex items-center gap-4">
+          borderColor:
+            "rgba(255,255,255,0.08)",
+        }}
+      >
+
+        <div
+          className="
+          max-w-screen-2xl
+          mx-auto
+          h-20
+          px-6
+          lg:px-10
+          flex
+          items-center
+          justify-between
+        "
+        >
+
+          {/* LEFT */}
+
+          <div
+            className="
+            flex
+            items-center
+            gap-4
+          "
+          >
+
+            <div
+              className="
+              w-12
+              h-12
+              rounded-2xl
+              flex
+              items-center
+              justify-center
+              text-2xl
+            "
+              style={{
+                background:
+                  "linear-gradient(135deg,#7C3AED,#06B6D4)",
+
+                boxShadow:
+                  "0 8px 24px rgba(124,58,237,0.35)",
+              }}
+            >
+              📖
+            </div>
+
+            <div>
+
+              <p
+                className="
+                text-xs
+                font-bold
+                tracking-[0.28em]
+              "
+                style={{
+                  color:
+                    "#A78BFA",
+                }}
+              >
+                SMART NOTICE SYSTEM
+              </p>
+
+              <h1
+                className="
+                text-2xl
+                font-extrabold
+              "
+                style={{
+                  color:
+                    "#F8FAFC",
+
+                  fontFamily:
+                    "'Plus Jakarta Sans',sans-serif",
+                }}
+              >
+                AI Digital Notice Board
+              </h1>
+
+            </div>
+
+          </div>
+
+          {/* RIGHT */}
+
+          <div
+            className="
+            hidden
+            lg:flex
+            items-center
+            gap-4
+          "
+          >
+
+            {/* TOTAL */}
+
+            <div
+              className="
+              rounded-2xl
+              px-6
+              py-3
+              border
+            "
+              style={{
+                background:
+                  "rgba(17,24,39,0.65)",
+
+                border:
+                  "1px solid rgba(255,255,255,0.08)",
+              }}
+            >
+
+              <p className="text-xs text-slate-400">
+                Total
+              </p>
+
+              <p className="text-2xl font-bold text-violet-400">
+                {notices.length}
+              </p>
+
+            </div>
+
+            {/* IMPORTANT */}
+
+            <div
+              className="
+              rounded-2xl
+              px-6
+              py-3
+              border
+            "
+              style={{
+                background:
+                  "rgba(17,24,39,0.65)",
+
+                border:
+                  "1px solid rgba(255,255,255,0.08)",
+              }}
+            >
+
+              <p className="text-xs text-slate-400">
+                Important
+              </p>
+
+              <p className="text-2xl font-bold text-rose-400">
+                {importantCount}
+              </p>
+
+            </div>
+
+            {/* LIVE */}
+
+            <div
+              className="
+              rounded-full
+              px-5
+              py-3
+              flex
+              items-center
+              gap-3
+              text-sm
+              font-bold
+            "
+              style={{
+                background:
+                  "rgba(16,185,129,0.12)",
+
+                border:
+                  "1px solid rgba(16,185,129,0.28)",
+
+                color:
+                  "#34D399",
+              }}
+            >
 
               <div
                 className="
-                h-16
-                w-16
-                rounded-3xl
-                bg-gradient-to-br
-                from-indigo-600
-                via-purple-600
-                to-cyan-500
-                text-white
-                flex
-                items-center
-                justify-center
-                text-3xl
-                shadow-premium
+                w-2
+                h-2
+                rounded-full
+                bg-emerald-400
+                animate-pulse
               "
-              >
-                🚀
-              </div>
+              />
 
-              <div>
-                <p className="uppercase tracking-[4px] text-xs font-bold text-indigo-600">
-                  AI NOTICE PLATFORM
-                </p>
-
-                <h1 className="text-3xl font-black text-slate-900">
-                  Digital Notice Board
-                </h1>
-              </div>
+              Live
 
             </div>
 
           </div>
 
         </div>
+
       </header>
 
-      <div className="container-app">
+      {/* MAIN CONTENT */}
 
-        {/* HERO SECTION */}
+      <div
+        className="
+        max-w-screen-2xl
+        mx-auto
+        px-6
+        lg:px-10
+        py-10
+      "
+      >
 
-        <section
+        <div
           className="
-          hero-gradient
-          rounded-[40px]
-          p-10
-          md:p-14
-          text-white
-          shadow-premium
-          overflow-hidden
-          relative
-          mb-10
+          grid
+          grid-cols-12
+          gap-10
+          items-start
         "
         >
 
-          <div className="absolute top-0 right-0 opacity-10 text-[250px]">
-            🤖
-          </div>
-
-          <div className="max-w-3xl">
-
-            <p className="uppercase tracking-[5px] text-sm font-semibold text-white/80 mb-4">
-              Smart Management System
-            </p>
-
-            <h1 className="text-5xl md:text-6xl font-black leading-tight">
-              Manage Notices
-              <br />
-              With AI Assistance
-            </h1>
-
-            <p className="mt-6 text-lg text-indigo-100 leading-8">
-              Create, organize, manage and search institutional
-              announcements with a beautiful AI-powered platform.
-            </p>
-
-          </div>
-
-        </section>
-
-        {/* STATS */}
-
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-
-          <div className="glass rounded-[30px] p-6 shadow-soft">
-
-            <div className="flex items-center justify-between">
-
-              <div>
-
-                <p className="text-slate-500 text-sm">
-                  Total Notices
-                </p>
-
-                <h2 className="text-4xl font-black mt-2">
-                  {notices.length}
-                </h2>
-
-              </div>
-
-              <div className="text-4xl">
-                📄
-              </div>
-
-            </div>
-
-          </div>
-
-          <div className="glass rounded-[30px] p-6 shadow-soft">
-
-            <div className="flex items-center justify-between">
-
-              <div>
-
-                <p className="text-slate-500 text-sm">
-                  Important Notices
-                </p>
-
-                <h2 className="text-4xl font-black text-indigo-600 mt-2">
-                  {importantCount}
-                </h2>
-
-              </div>
-
-              <div className="text-4xl">
-                📌
-              </div>
-
-            </div>
-
-          </div>
-
-          <div className="glass rounded-[30px] p-6 shadow-soft">
-
-            <div className="flex items-center justify-between">
-
-              <div>
-
-                <p className="text-slate-500 text-sm">
-                  AI Search
-                </p>
-
-                <h2 className="text-4xl font-black gradient-text mt-2">
-                  Active
-                </h2>
-
-              </div>
-
-              <div className="text-4xl">
-                🤖
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-        {/* MAIN CONTENT */}
-
-        <section className="grid grid-cols-12 gap-8">
-
           {/* LEFT PANEL */}
 
-          <div className="col-span-12 lg:col-span-4">
+          <div
+            className="
+            col-span-12
+            xl:col-span-4
+          "
+          >
 
             <div className="sticky top-28">
 
@@ -261,23 +349,13 @@ export default function Page() {
 
           {/* RIGHT PANEL */}
 
-          <div className="col-span-12 lg:col-span-8 space-y-8">
-
-            <div className="glass rounded-[32px] p-8 shadow-soft">
-
-              <p className="uppercase text-xs tracking-[3px] text-indigo-500 font-bold mb-2">
-                NOTICE MANAGEMENT
-              </p>
-
-              <h2 className="text-4xl font-black text-slate-900">
-                All Notices
-              </h2>
-
-              <p className="text-slate-500 mt-3 text-lg">
-                Create, organize and manage all announcements.
-              </p>
-
-            </div>
+          <div
+            className="
+            col-span-12
+            xl:col-span-8
+            min-w-0
+          "
+          >
 
             <NoticeList
               notices={notices}
@@ -288,7 +366,7 @@ export default function Page() {
 
           </div>
 
-        </section>
+        </div>
 
       </div>
 
