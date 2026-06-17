@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -14,10 +14,12 @@ import {
 export default function PublishPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
 
   const router = useRouter();
+
+  const { id } = use(params);
 
   const [editingNotice, setEditingNotice] =
     useState<Notice | null>(null);
@@ -26,13 +28,10 @@ export default function PublishPage({
 
     async function loadNotice() {
 
-      const notices =
-        await fetchNotices();
+      const notices = await fetchNotices();
 
       const notice =
-        notices.find(
-          (n) => n.id === params.id
-        );
+        notices.find((n) => n.id === id);
 
       if (notice) {
 
@@ -44,7 +43,7 @@ export default function PublishPage({
 
     loadNotice();
 
-  }, [params.id]);
+  }, [id]);
 
   function handleSuccess() {
 
